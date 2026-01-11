@@ -1,46 +1,89 @@
-# Getting Started with Create React App
+# 🎙️ Phonics Kingdom
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Phonics Kingdom** is an immersive, play-first educational platform designed for children aged 4-6. It transforms foundational literacy—phonemic awareness, letter-sound correspondence, and CVC blending—into a "stealth learning" adventure.
 
-## Available Scripts
+Built with a "vibe-coding" philosophy and powered by the **Google Gemini API**, Phonics Kingdom leverages generative AI to create a dynamic, adaptive, and infinitely replayable world.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🌟 The Vision
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Most literacy apps are either "digital worksheets" or "empty entertainment." Phonics Kingdom reconciles these by creating a persistent world where spelling and phonics are the core mechanics of play.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Objective:** Defeat the **Static Scrambler** and restore the sounds of the Kingdom.
+- **Methodology:** Evidence-based phonics curriculum wrapped in a 2.5D gamified experience.
+- **AI Core:** Real-time task generation, unique character voices, and custom-drawn visuals for every learning prompt.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🦊 Meet the Sound Squad
 
-### `npm run build`
+The Kingdom is protected by an original cast of characters, each representing a key phonics pillar:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Character | Role | Mechanic |
+| :--- | :--- | :--- |
+| **Brio the Beatboxer** | Master of Rhythm | Phonemic awareness, syllables, and sound blending. |
+| **Vowelia** | Magical Weaver | Short vowel recognition and placement. |
+| **Diesel the Digger** | Sound Builder | "Digging up" beginning consonants and building word foundations. |
+| **Zippy the Zoomer** | Rhyme Racer | Ending sounds, rhyming patterns, and sight words. |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🚀 Key Features
 
-### `npm run eject`
+### 1. **Adaptive Learning Engine**
+The app doesn't just show static flashcards. The `gemini-3-flash-preview` model acts as a "Dungeon Master," generating task wording that matches the selected character's personality and the child's current mastery level.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### 2. **Multimodal AI Integration**
+- **Visuals:** `gemini-2.5-flash-image` draws a custom illustration for every task to provide context for non-readers.
+- **Audio:** `gemini-2.5-flash-preview-tts` provides high-quality, character-specific voices for all instructions.
+- **Logic:** Adaptive difficulty ensures children stay in the "flow state"—not too easy to be boring, not too hard to be frustrating.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 3. **Parent Dashboard**
+A jargon-free hub for parents to see real progress.
+- **Accuracy Tracking:** See which sounds are mastered and which need more play.
+- **Educational Insights:** Plain-language summaries of what "Phonemic Awareness" actually means for their child.
+- **Offline Extensions:** AI-suggested real-world activities to reinforce learning.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## 🛠️ Technical Stack
 
-## Learn More
+- **Frontend:** React 19 (ESM), Tailwind CSS.
+- **Intelligence:** `@google/genai` (Google Gemini SDK).
+- **Audio:** Web Audio API (PCM Decoding).
+- **Visuals:** Vector-based parallax Magic Map + AI-generated Task Art.
+- **Fonts:** Dyslexia-friendly (Andika) and high-legibility (Lexend).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📥 Getting Started
+
+### Prerequisites
+- An active **Google Gemini API Key**.
+- A modern browser with Microphone and Audio permissions enabled.
+
+### Setup
+1. Clone the repository.
+2. Ensure `process.env.API_KEY` is configured in your environment.
+3. Serve the `index.html` file using any standard dev server (e.g., Vite, Live Server).
+
+---
+
+## 📋 Roadmap
+
+- [x] Phase 1: Core IP and character logic.
+- [x] Phase 2: AI-driven task and visual generation.
+- [ ] Phase 3: "Party Play" (Asynchronous cooperative missions).
+- [ ] Phase 4: Mobile deployment (iOS/Android/Amazon Fire).
+
+---
+
+## ⚖️ Legal & Privacy
+
+- **IP Status:** All characters (Brio, Vowelia, Diesel, Zippy) and "Phonics Kingdom" branding are original creative works.
+- **Privacy:** Designed with **COPPA/GDPR-K** principles. No child-identifiable data is stored; all AI interactions are anonymized.
+
+---
+
+*“Play is the highest form of research.” — Albert Einstein*
