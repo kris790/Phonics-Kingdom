@@ -1,6 +1,7 @@
 // Feedback Overlay Component
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { haptics } from '../../services/nativeService';
 
 interface FeedbackOverlayProps {
   type: 'correct' | 'incorrect' | null;
@@ -11,6 +12,15 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({
   type,
   encouragement,
 }) => {
+  // Trigger haptic feedback when feedback type changes
+  useEffect(() => {
+    if (type === 'correct') {
+      haptics.success();
+    } else if (type === 'incorrect') {
+      haptics.warning();
+    }
+  }, [type]);
+
   return (
     <AnimatePresence mode="wait">
       {type && (

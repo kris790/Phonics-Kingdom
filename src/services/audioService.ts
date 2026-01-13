@@ -1,6 +1,7 @@
 // Audio Service - Global audio management with circuit breaker
 import { storageService } from './storageService';
 import { CHARACTERS } from '../types';
+import { speak as nativeSpeak, speakPhonics, speakWord, stopSpeaking, isNativeTTS } from './nativeTTSService';
 
 type AudioState = 'idle' | 'playing' | 'paused';
 
@@ -261,34 +262,64 @@ export const audioService = {
     }
   },
 
-  // Speak text using Web Speech API (fallback when TTS unavailable)
-  speak: (text: string, options: { rate?: number; pitch?: number; onComplete?: () => void } = {}): void => {
+  // Speak text using Native TTS (preferred) or Web Speech API (fallback)
+  speak: (text: string, options: { rate?: number; pitch?: number; characterId?: string; onComplete?: () => void } = {}): void => {
     if (!serviceState.isEnabled) {
       options.onComplete?.();
       return;
     }
 
-    if ('speechSynthesis' in window) {
-      // Stop any current speech
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = options.rate ?? 0.9;
-      utterance.pitch = options.pitch ?? 1.0;
-      utterance.onend = () => options.onComplete?.();
-      utterance.onerror = () => options.onComplete?.();
-
-      window.speechSynthesis.speak(utterance);
-    } else {
-      console.warn('Speech synthesis not supported');
+    // Use native TTS service (handles fallback automatically)
+    nativeSpeak(text, {
+      rate: options.rate,
+      pitch: options.pitch,
+      characterId: options.characterId,
+      onComplete: options.onComplete,
+    }).catch(error => {
+      console.error('TTS failed:', error);
       options.onComplete?.();
+    });
+  },
+
+  // Speak phonics sound with native TTS optimization
+  speakPhonics: (sound: string, options: { repeat?: number; onComplete?: () => void } = {}): void => {
+    if (!serviceState.isEnabled) {
+      options.onComplete?.();
+      return;
     }
+
+    speakPhonics(sound, {
+      repeat: options.repeat,
+      pauseBetween: 400,
+      onComplete: options.onComplete,
+    }).catch(error => {
+      console.error('Phonics TTS failed:', error);
+      options.onComplete?.();
+    });
+  },
+
+  // Speak word with optional breakdown
+  speakWord: (word: string, options: { breakdown?: boolean; characterId?: string; onComplete?: () => void } = {}): void => {
+    if (!serviceState.isEnabled) {
+      options.onComplete?.();
+      return;
+    }
+
+    speakWord(word, {
+      breakdown: options.breakdown,
+      characterId: options.characterId,
+      onComplete: options.onComplete,
+    }).catch(error => {
+      console.error('Word TTS failed:', error);
+      options.onComplete?.();
+    });
   },
 
   // Cancel speech
   cancelSpeech: (): void => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    stopSpeaking();
   },
+
+  // Check if using native TTS
+  isNativeTTS: (): boolean => isNativeTTS(),
 };

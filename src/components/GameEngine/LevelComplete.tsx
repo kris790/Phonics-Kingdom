@@ -1,7 +1,8 @@
 // Level Complete Component
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Character } from '../../types';
+import { haptics } from '../../services/nativeService';
 
 interface LevelCompleteProps {
   accuracy: number;
@@ -22,6 +23,26 @@ export const LevelComplete: React.FC<LevelCompleteProps> = ({
 }) => {
   const stars = accuracy >= 85 ? 3 : accuracy >= 60 ? 2 : accuracy >= 40 ? 1 : 0;
   const isPassing = accuracy >= 85;
+
+  // Celebrate with haptic feedback on level complete
+  useEffect(() => {
+    if (isPassing) {
+      haptics.celebrate();
+    } else {
+      haptics.tap();
+    }
+  }, [isPassing]);
+
+  // Haptic feedback for buttons
+  const handleReplay = () => {
+    haptics.tap();
+    onReplay();
+  };
+
+  const handleContinue = () => {
+    haptics.success();
+    onContinue();
+  };
 
   return (
     <div className="min-h-screen bg-kingdom-bg flex items-center justify-center p-4">
@@ -121,13 +142,13 @@ export const LevelComplete: React.FC<LevelCompleteProps> = ({
           className="flex gap-4"
         >
           <button
-            onClick={onReplay}
+            onClick={handleReplay}
             className="flex-1 py-3 px-6 border-2 border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Play Again
           </button>
           <button
-            onClick={onContinue}
+            onClick={handleContinue}
             className="flex-1 py-3 px-6 bg-gradient-to-r from-brio-teal to-vowelia-purple text-white rounded-xl font-medium hover:opacity-90 transition-opacity"
           >
             Continue
