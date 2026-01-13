@@ -1,7 +1,7 @@
 // Phonics Kingdom - Main App with Centralized State Management
 import React, { useReducer, useEffect, useCallback } from 'react';
 import './App.css';
-import { GameState, GameAction, LevelSession } from './types';
+import { GameState, GameAction, LevelSession, SkillLevel, CharacterType } from './types';
 import { storageService } from './services/storageService';
 import { telemetryService } from './services/telemetryService';
 import { dummyDataService } from './services/dummyDataService';
@@ -10,6 +10,14 @@ import { CharacterSelectorModal } from './components/CharacterSelectorModal';
 import { MagicMap } from './components/MagicMap';
 import { GameEngine } from './components/GameEngine';
 import { ParentHub } from './components/ParentHub';
+import LandingPage from './components/LandingPage';
+import OnboardingFlow from './components/OnboardingFlow';
+import PlacementAssessment from './components/PlacementAssessment';
+import WorldIntro from './components/WorldIntro';
+import ParentLock from './components/ParentLock';
+import SoundVault from './components/SoundVault';
+import DailyChallenge from './components/DailyChallenge';
+import CharacterChat from './components/CharacterChat';
 
 // Seed dummy data on first load (for demo/testing)
 // This only runs once if no data exists
@@ -168,6 +176,52 @@ const appReducer = (state: GameState, action: GameAction): GameState => {
         currentSession: null,
       };
 
+    case 'SET_PLAYER_NAME':
+      return {
+        ...state,
+        playerName: action.name,
+      };
+
+    case 'COMPLETE_ONBOARDING':
+      return {
+        ...state,
+        hasCompletedOnboarding: true,
+        selectedCharacterId: action.characterId,
+        view: 'placement-assessment',
+      };
+
+    case 'COMPLETE_ASSESSMENT':
+      return {
+        ...state,
+        hasCompletedAssessment: true,
+        startingSkillLevel: action.skillLevel,
+        view: 'world-intro',
+      };
+
+    case 'COMPLETE_WORLD_INTRO':
+      return {
+        ...state,
+        hasSeenWorldIntro: true,
+        view: 'magic-map',
+      };
+
+    case 'COMPLETE_DAILY_CHALLENGE': {
+      const today = new Date().toISOString().split('T')[0];
+      return {
+        ...state,
+        totalStars: state.totalStars + action.stars,
+        lastDailyChallengeDate: today,
+        dailyChallengeStreak: state.dailyChallengeStreak + 1,
+        view: 'magic-map',
+      };
+    }
+
+    case 'ADD_MASTERED_GUARDIAN':
+      return {
+        ...state,
+        masteredGuardians: [...state.masteredGuardians, action.guardian],
+      };
+
     default:
       return state;
   }
@@ -199,6 +253,52 @@ function App() {
   // Render current view
   const renderView = () => {
     switch (state.view) {
+      case 'landing':
+        return (
+          <LandingPage 
+            onStart={() => {
+              if (state.hasCompletedOnboarding && state.hasSeenWorldIntro) {
+                dispatch({ type: 'NAVIGATE', view: 'magic-map' });
+              } else if (state.hasCompletedOnboarding) {
+                dispatch({ type: 'NAVIGATE', view: 'world-intro' });
+              } else {
+                dispatch({ type: 'NAVIGATE', view: 'onboarding' });
+              }
+            }} 
+          />
+        );
+
+      case 'onboarding':
+        return (
+          <OnboardingFlow
+            onComplete={(name: string, characterId: string) => {
+              dispatch({ type: 'SET_PLAYER_NAME', name });
+              dispatch({ type: 'COMPLETE_ONBOARDING', characterId });
+            }}
+          />
+        );
+
+      case 'placement-assessment':
+        return (
+          <PlacementAssessment
+            characterType={(state.selectedCharacterId || 'brio') as CharacterType}
+            onComplete={(_score: number, skillLevel: SkillLevel) => {
+              dispatch({ type: 'COMPLETE_ASSESSMENT', skillLevel });
+            }}
+          />
+        );
+
+      case 'world-intro':
+        return (
+          <WorldIntro
+            playerName={state.playerName || 'Adventurer'}
+            characterType={(state.selectedCharacterId || 'brio') as CharacterType}
+            onComplete={() => {
+              dispatch({ type: 'COMPLETE_WORLD_INTRO' });
+            }}
+          />
+        );
+
       case 'character-select':
         return (
           <CharacterSelectorModal
@@ -225,6 +325,14 @@ function App() {
           />
         );
 
+      case 'parent-lock':
+        return (
+          <ParentLock
+            onUnlock={() => dispatch({ type: 'NAVIGATE', view: 'parent-hub' })}
+            onCancel={() => dispatch({ type: 'NAVIGATE', view: 'magic-map' })}
+          />
+        );
+
       case 'parent-hub':
         return (
           <ParentHub
@@ -234,7 +342,6 @@ function App() {
         );
 
       case 'settings':
-        // Settings is embedded in ParentHub for now
         return (
           <ParentHub
             state={state}
@@ -242,12 +349,42 @@ function App() {
           />
         );
 
+      case 'sound-vault':
+        return (
+          <SoundVault
+            nodes={[]}
+            guardians={{}}
+            onSaveGuardian={() => {}}
+            onClose={() => dispatch({ type: 'NAVIGATE', view: 'magic-map' })}
+          />
+        );
+
+      case 'daily-challenge':
+        return (
+          <DailyChallenge
+            characterType={(state.selectedCharacterId || 'brio') as CharacterType}
+            onComplete={(stars: number) => {
+              dispatch({ type: 'COMPLETE_DAILY_CHALLENGE', stars });
+            }}
+            onExit={() => dispatch({ type: 'NAVIGATE', view: 'magic-map' })}
+          />
+        );
+
+      case 'character-chat':
+        return (
+          <CharacterChat
+            characterType={(state.selectedCharacterId || 'brio') as CharacterType}
+            playerName={state.playerName || 'Adventurer'}
+            nodes={[]}
+            sessions={[]}
+            onExit={() => dispatch({ type: 'NAVIGATE', view: 'magic-map' })}
+          />
+        );
+
       default:
         return (
-          <CharacterSelectorModal
-            isOpen={true}
-            onSelect={handleCharacterSelect}
-            dispatch={dispatch}
+          <LandingPage 
+            onStart={() => dispatch({ type: 'NAVIGATE', view: 'onboarding' })} 
           />
         );
     }

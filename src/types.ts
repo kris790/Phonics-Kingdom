@@ -308,12 +308,24 @@ export interface LevelSession {
 }
 
 export interface GameState {
+  // User profile
+  playerName: string | null;
+  hasCompletedOnboarding: boolean;
+  hasCompletedAssessment: boolean;
+  hasSeenWorldIntro: boolean;
+  startingSkillLevel: SkillLevel | null;
+  
   // User progress
   selectedCharacterId: string | null;
   currentIslandId: string | null;
   currentLevel: number;
   totalStars: number;
   shardsCollected: string[]; // Island IDs with mastery
+  masteredGuardians: MasteredGuardian[];
+  
+  // Daily challenge
+  lastDailyChallengeDate: string | null;
+  dailyChallengeStreak: number;
   
   // Island progress
   islandProgress: Record<string, IslandProgress>;
@@ -332,11 +344,19 @@ export interface GameState {
 }
 
 export type AppView = 
+  | 'landing'
+  | 'onboarding'
+  | 'placement-assessment'
+  | 'world-intro'
   | 'character-select'
   | 'magic-map'
   | 'game'
   | 'parent-hub'
-  | 'settings';
+  | 'parent-lock'
+  | 'settings'
+  | 'sound-vault'
+  | 'daily-challenge'
+  | 'character-chat';
 
 // ============================================
 // Action Types
@@ -355,7 +375,13 @@ export type GameAction =
   | { type: 'SET_ERROR'; error: string | null }
   | { type: 'LOAD_STATE'; state: Partial<GameState> }
   | { type: 'RESET_SESSION' }
-  | { type: 'REPLAY_LEVEL' };
+  | { type: 'REPLAY_LEVEL' }
+  | { type: 'SET_PLAYER_NAME'; name: string }
+  | { type: 'COMPLETE_ONBOARDING'; characterId: string }
+  | { type: 'COMPLETE_ASSESSMENT'; skillLevel: SkillLevel }
+  | { type: 'COMPLETE_WORLD_INTRO' }
+  | { type: 'COMPLETE_DAILY_CHALLENGE'; stars: number }
+  | { type: 'ADD_MASTERED_GUARDIAN'; guardian: MasteredGuardian };
 
 // ============================================
 // Island Types

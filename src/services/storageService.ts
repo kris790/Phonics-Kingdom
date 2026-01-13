@@ -10,16 +10,31 @@ const STORAGE_KEYS = {
 
 // Default initial state
 const getDefaultState = (): GameState => ({
+  // User profile
+  playerName: null,
+  hasCompletedOnboarding: false,
+  hasCompletedAssessment: false,
+  hasSeenWorldIntro: false,
+  startingSkillLevel: null,
+  
+  // User progress
   selectedCharacterId: null,
   currentIslandId: null,
   currentLevel: 1,
   totalStars: 0,
   shardsCollected: [],
+  masteredGuardians: [],
+  
+  // Daily challenge
+  lastDailyChallengeDate: null,
+  dailyChallengeStreak: 0,
+  
+  // Other state
   islandProgress: {},
   currentSession: null,
   audioEnabled: true,
   instructionSpeed: 'normal',
-  view: 'character-select',
+  view: 'landing',
   isLoading: false,
   error: null,
 });

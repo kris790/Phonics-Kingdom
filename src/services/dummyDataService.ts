@@ -121,6 +121,16 @@ export const dummyDataService = {
       // Save game state
       const fullState: GameState = {
         ...DUMMY_GAME_STATE,
+        // User profile fields
+        playerName: DUMMY_GAME_STATE.playerName || 'Demo Player',
+        hasCompletedOnboarding: true,
+        hasCompletedAssessment: true,
+        hasSeenWorldIntro: true,
+        startingSkillLevel: null,
+        masteredGuardians: [],
+        lastDailyChallengeDate: null,
+        dailyChallengeStreak: 0,
+        // Existing fields
         selectedCharacterId: DUMMY_GAME_STATE.selectedCharacterId || null,
         currentIslandId: DUMMY_GAME_STATE.currentIslandId || null,
         currentLevel: DUMMY_GAME_STATE.currentLevel || 1,
@@ -206,6 +216,14 @@ export const dummyDataService = {
     }
 
     const strugglingState: GameState = {
+      playerName: 'Struggling Learner',
+      hasCompletedOnboarding: true,
+      hasCompletedAssessment: true,
+      hasSeenWorldIntro: true,
+      startingSkillLevel: null,
+      masteredGuardians: [],
+      lastDailyChallengeDate: null,
+      dailyChallengeStreak: 0,
       selectedCharacterId: 'vowelia',
       currentIslandId: null,
       currentLevel: 1,
@@ -250,6 +268,14 @@ export const dummyDataService = {
     }
 
     const advancedState: GameState = {
+      playerName: 'Advanced Learner',
+      hasCompletedOnboarding: true,
+      hasCompletedAssessment: true,
+      hasSeenWorldIntro: true,
+      startingSkillLevel: null,
+      masteredGuardians: [],
+      lastDailyChallengeDate: null,
+      dailyChallengeStreak: 5,
       selectedCharacterId: 'diesel',
       currentIslandId: null,
       currentLevel: 1,
