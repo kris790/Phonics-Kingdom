@@ -5,11 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import { initializeNative, isNative } from './services/nativeService';
+import { initializeNativeTTS, isNativeTTS } from './services/nativeTTSService';
 
 // Initialize native features if running in Capacitor
-initializeNative().then(() => {
+Promise.all([
+  initializeNative(),
+  initializeNativeTTS(),
+]).then(() => {
   console.log('[App] Native initialization complete');
-  console.log('[App] Running as:', isNative() ? 'Native App' : 'Web/PWA');
+  console.log('[App] Platform:', isNative() ? 'Native App' : 'Web/PWA');
+  console.log('[App] TTS Engine:', isNativeTTS() ? 'Native (fast)' : 'Web Speech API');
 }).catch(error => {
   console.warn('[App] Native initialization failed:', error);
 });
