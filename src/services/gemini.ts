@@ -1,5 +1,6 @@
 // Gemini AI Service for intelligent tutoring
 // This is a mock service - replace with actual Gemini API integration
+import { anonymizationService } from './anonymizationService';
 
 // Using string type for character to avoid import issues
 type CharacterTypeSimple = string;
@@ -56,10 +57,26 @@ class GeminiService {
       sessions?: GameSessionSimple[];
     }
   ): Promise<string> {
-    // Add to conversation history
-    this.conversationHistory.push({ role: 'user', content: prompt });
+    // COPPA/GDPR-K Compliance: Anonymize all data before AI processing
+    const anonymizedPrompt = anonymizationService.anonymize(prompt);
+    const safeContext = context ? {
+      ...context,
+      playerName: context.playerName ? '[FRIEND]' : undefined, // Never send real names
+    } : undefined;
+
+    // Log anonymized data for debugging (never logs real PII)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Gemini] Anonymized prompt:', anonymizedPrompt.anonymizedText);
+      if (anonymizedPrompt.wasModified) {
+        console.log('[Gemini] PII detected and removed:', anonymizedPrompt.piiDetected.length, 'items');
+      }
+    }
+
+    // Add to conversation history (with anonymized text)
+    this.conversationHistory.push({ role: 'user', content: anonymizedPrompt.anonymizedText });
 
     // Character personalities
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const personalities: Record<string, string> = {
       brio: "You are Brio, an energetic lion cub who loves phonics! You're enthusiastic, use words like 'awesome', 'let's go!', and encourage with high energy.",
       vowelia: "You are Vowelia, a wise owl who speaks calmly and thoughtfully. You use gentle encouragement and occasionally share wisdom about sounds and letters.",

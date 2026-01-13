@@ -1,8 +1,10 @@
 // Phonics Kingdom Service Worker
 // Enables offline-first functionality for the PWA
 
-const CACHE_NAME = 'phonics-kingdom-v1';
+const CACHE_NAME = 'phonics-kingdom-v2';
 const RUNTIME_CACHE = 'phonics-kingdom-runtime';
+const AUDIO_CACHE = 'phonics-kingdom-audio';
+const GAME_DATA_CACHE = 'phonics-kingdom-gamedata';
 
 // Assets to cache immediately on install
 const PRECACHE_ASSETS = [
@@ -12,6 +14,23 @@ const PRECACHE_ASSETS = [
   '/favicon.ico',
   '/logo192.png',
   '/logo512.png',
+  // Character images
+  '/characters/brio.png',
+  '/characters/vowelia.png',
+  '/characters/diesel.png',
+  '/characters/zippy.png',
+  // Island images (fallback to gradients if not available)
+  '/islands/consonant-cove.png',
+  '/islands/vowel-valley.png',
+  '/islands/blend-beach.png',
+  '/islands/digraph-den.png',
+  '/islands/sight-word-summit.png',
+  // Core sounds needed for gameplay
+  '/sounds/correct.mp3',
+  '/sounds/incorrect.mp3',
+  '/sounds/star.mp3',
+  '/sounds/click.mp3',
+  '/sounds/complete.mp3',
 ];
 
 // Install event - precache critical assets
