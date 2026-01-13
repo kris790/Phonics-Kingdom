@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2732 2732">
+  <defs>
+    <linearGradient id="splashBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1e1b4b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="crownGold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fcd34d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#14b8a6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="2732" height="2732" fill="url(#splashBg)"/>
+  
+  <!-- Magical stars background -->
+  <g fill="rgba(255,255,255,0.1)">
+    <circle cx="300" cy="400" r="3"/>
+    <circle cx="500" cy="200" r="2"/>
+    <circle cx="800" cy="350" r="4"/>
+    <circle cx="2200" cy="300" r="3"/>
+    <circle cx="2400" cy="500" r="2"/>
+    <circle cx="2000" cy="200" r="3"/>
+    <circle cx="400" cy="2300" r="3"/>
+    <circle cx="600" cy="2500" r="2"/>
+    <circle cx="2300" cy="2400" r="4"/>
+    <circle cx="2100" cy="2200" r="2"/>
+    <circle cx="200" cy="1200" r="3"/>
+    <circle cx="2500" cy="1400" r="3"/>
+  </g>
+  
+  <!-- Crown - centered above text -->
+  <g transform="translate(1366, 950)">
+    <!-- Crown base -->
+    <path d="M-280,120 L-280,0 L-180,-120 L-90,0 L0,-150 L90,0 L180,-120 L280,0 L280,120 Z" 
+          fill="url(#crownGold)" stroke="#ca8a04" stroke-width="12"/>
+    <!-- Crown jewels -->
+    <circle cx="-180" cy="-60" r="30" fill="#ef4444"/>
+    <circle cx="0" cy="-90" r="36" fill="#3b82f6"/>
+    <circle cx="180" cy="-60" r="30" fill="#22c55e"/>
+    <!-- Crown band -->
+    <rect x="-280" y="90" width="560" height="45" fill="#ca8a04" rx="8"/>
+    <!-- Crown glow -->
+    <ellipse cx="0" cy="0" rx="320" ry="200" fill="none" stroke="rgba(252,211,77,0.3)" stroke-width="20"/>
+  </g>
+  
+  <!-- Main Title: PHONICS -->
+  <text x="1366" y="1300" 
+        font-family="Arial Black, Arial, sans-serif" 
+        font-size="220" 
+        font-weight="900"
+        fill="url(#textGradient)" 
+        text-anchor="middle"
+        style="filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5))">
+    PHONICS
+  </text>
+  
+  <!-- Subtitle: KINGDOM -->
+  <text x="1366" y="1520" 
+        font-family="Arial Black, Arial, sans-serif" 
+        font-size="180" 
+        font-weight="900"
+        fill="white" 
+        text-anchor="middle"
+        style="filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5))">
+    KINGDOM
+  </text>
+  
+  <!-- Tagline -->
+  <text x="1366" y="1700" 
+        font-family="Arial, sans-serif" 
+        font-size="60" 
+        fill="rgba(255,255,255,0.7)" 
+        text-anchor="middle">
+    Learn to Read with Magic ✨
+  </text>
+  
+  <!-- Sparkles around crown -->
+  <g fill="#fcd34d" opacity="0.8">
+    <polygon points="900,800 915,830 945,815 915,830 930,860 915,830 885,845 915,830" transform="scale(1.5)"/>
+    <polygon points="1700,750 1715,780 1745,765 1715,780 1730,810 1715,780 1685,795 1715,780" transform="scale(1.5)"/>
+    <polygon points="1100,650 1110,670 1130,660 1110,670 1120,690 1110,670 1090,680 1110,670" transform="scale(2)"/>
+    <polygon points="1600,680 1610,700 1630,690 1610,700 1620,720 1610,700 1590,710 1610,700" transform="scale(2)"/>
+  </g>
+  
+  <!-- Bottom decorative line -->
+  <rect x="1066" y="1780" width="600" height="4" rx="2" fill="url(#textGradient)" opacity="0.5"/>
+</svg>

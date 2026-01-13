@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#14b8a6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="crownGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fcd34d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="512" cy="512" r="480" fill="url(#bgGradient)"/>
+  
+  <!-- Inner glow -->
+  <circle cx="512" cy="512" r="420" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="40"/>
+  
+  <!-- Crown -->
+  <g transform="translate(512, 380)">
+    <!-- Crown base -->
+    <path d="M-180,80 L-180,0 L-120,-80 L-60,0 L0,-100 L60,0 L120,-80 L180,0 L180,80 Z" 
+          fill="url(#crownGradient)" stroke="#ca8a04" stroke-width="8"/>
+    <!-- Crown jewels -->
+    <circle cx="-120" cy="-40" r="20" fill="#ef4444"/>
+    <circle cx="0" cy="-60" r="24" fill="#3b82f6"/>
+    <circle cx="120" cy="-40" r="20" fill="#22c55e"/>
+    <!-- Crown band -->
+    <rect x="-180" y="60" width="360" height="30" fill="#ca8a04" rx="5"/>
+  </g>
+  
+  <!-- Letter "P" stylized -->
+  <g transform="translate(512, 620)">
+    <text x="0" y="0" 
+          font-family="Arial Black, Arial, sans-serif" 
+          font-size="280" 
+          font-weight="900"
+          fill="white" 
+          text-anchor="middle"
+          dominant-baseline="middle"
+          style="filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.3))">
+      P
+    </text>
+  </g>
+  
+  <!-- Sparkles -->
+  <g fill="#fcd34d">
+    <polygon points="200,200 210,220 230,210 210,220 220,240 210,220 190,230 210,220" transform="scale(1.5)"/>
+    <polygon points="700,150 710,170 730,160 710,170 720,190 710,170 690,180 710,170" transform="scale(1.2)"/>
+    <polygon points="800,400 810,420 830,410 810,420 820,440 810,420 790,430 810,420"/>
+    <polygon points="150,500 160,520 180,510 160,520 170,540 160,520 140,530 160,520" transform="scale(1.3)"/>
+  </g>
+</svg>

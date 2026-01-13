@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2dd4bf" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Phonics Kingdom" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Phonics Kingdom" />
+    <meta name="msapplication-TileColor" content="#2dd4bf" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- SEO & Description -->
+    <meta name="description" content="Phonics Kingdom - An AI-powered phonics adventure for children ages 4-7. Learn letter sounds, build words, and collect King Shards!" />
+    <meta name="keywords" content="phonics, learn to read, kids education, reading app, letter sounds, children learning" />
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Phonics Kingdom" />
+    <meta property="og:description" content="An AI-powered phonics adventure for children ages 4-7" />
+    <meta property="og:image" content="%PUBLIC_URL%/logo512.png" />
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="%PUBLIC_URL%/logo512.png" />
+    
+    <!-- Splash Screens for iOS (optional - would need actual images) -->
+    <!-- <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/splash.png" /> -->
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Preconnect to potential external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <title>Phonics Kingdom - Learn to Read with Magic</title>
+    
+    <!-- Inline critical CSS for faster first paint -->
+    <style>
+      /* Prevent flash of unstyled content */
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: linear-gradient(135deg, #7dd3fc 0%, #2dd4bf 50%, #a855f7 100%);
+        min-height: 100vh;
+      }
+      
+      /* Loading spinner for initial load */
+      #root:empty::after {
+        content: '';
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 50px;
+        height: 50px;
+        margin: -25px 0 0 -25px;
+        border: 4px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      /* Offline indicator styles */
+      .offline-banner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #f59e0b;
+        color: white;
+        text-align: center;
+        padding: 8px;
+        font-size: 14px;
+        z-index: 9999;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+      }
+      
+      .offline-banner.visible {
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <div style="padding: 40px; text-align: center; font-family: sans-serif;">
+        <h1>🏰 Phonics Kingdom</h1>
+        <p>You need to enable JavaScript to run this app.</p>
+        <p>Please enable JavaScript in your browser settings and reload the page.</p>
+      </div>
+    </noscript>
+    
+    <!-- Offline indicator -->
+    <div id="offline-banner" class="offline-banner">
+      📴 You're offline - Some features may be limited
+    </div>
+    
+    <div id="root"></div>
+    
+    <!-- Offline detection script -->
+    <script>
+      (function() {
+        var banner = document.getElementById('offline-banner');
+        function updateOnlineStatus() {
+          if (navigator.onLine) {
+            banner.classList.remove('visible');
+          } else {
+            banner.classList.add('visible');
+          }
+        }
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
+      })();
+    </script>
+  </body>
+</html>
