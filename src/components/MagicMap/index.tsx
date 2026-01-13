@@ -4,13 +4,23 @@ import { motion } from 'framer-motion';
 import { GameState, GameAction, ISLANDS, CHARACTERS } from '../../types';
 import { usePWA } from '../../hooks/usePWA';
 
-// Island background images (using beautiful landscape photos)
+// Island background images - place your images in public/images/islands/
+// Required files: consonant-cove.jpg, vowel-valley.jpg, blend-beach.jpg, digraph-den.jpg, sight-word-summit.jpg
 const ISLAND_IMAGES: Record<string, string> = {
-  'consonant-cove': 'https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400&h=400&fit=crop',
-  'vowel-valley': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop',
-  'blend-beach': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop',
-  'digraph-den': 'https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=400&h=400&fit=crop',
-  'sight-word-summit': 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=400&fit=crop',
+  'consonant-cove': '/images/islands/consonant-cove.jpg',
+  'vowel-valley': '/images/islands/vowel-valley.jpg',
+  'blend-beach': '/images/islands/blend-beach.jpg',
+  'digraph-den': '/images/islands/digraph-den.jpg',
+  'sight-word-summit': '/images/islands/sight-word-summit.jpg',
+};
+
+// Fallback gradients when images aren't available
+const ISLAND_GRADIENTS: Record<string, string> = {
+  'consonant-cove': 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #22d3ee 100%)',
+  'vowel-valley': 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #d946ef 100%)',
+  'blend-beach': 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%)',
+  'digraph-den': 'linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%)',
+  'sight-word-summit': 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #c084fc 100%)',
 };
 
 interface MagicMapProps {
@@ -174,7 +184,7 @@ export const MagicMap: React.FC<MagicMapProps> = ({
                     focus:outline-none focus:ring-4 focus:ring-purple-500/50
                   `}
                   style={{
-                    backgroundImage: `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%), url("${ISLAND_IMAGES[island.id]}")`,
+                    background: `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%), url("${ISLAND_IMAGES[island.id]}"), ${ISLAND_GRADIENTS[island.id]}`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     borderColor: restored ? island.color : 'transparent',

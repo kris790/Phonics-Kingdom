@@ -583,3 +583,93 @@ export const KINGDOM_RESTORATION = {
     description: 'The Scrambler\'s curse is broken!',
   },
 };
+
+// ============================================
+// Extended Types for New App Architecture
+// ============================================
+
+export enum SkillLevel {
+  PHONEMIC_AWARENESS = 'PHONEMIC_AWARENESS',
+  LETTER_SOUNDS = 'LETTER_SOUNDS',
+  DIGRAPHS_BLENDS = 'DIGRAPHS_BLENDS',
+  BLENDING_CVC = 'BLENDING_CVC',
+  SIGHT_WORDS = 'SIGHT_WORDS',
+}
+
+export enum DifficultyLevel {
+  EASY = 'EASY',
+  NORMAL = 'NORMAL',
+  HARD = 'HARD',
+}
+
+export interface SkillNode {
+  id: string;
+  title: string;
+  description: string;
+  level: SkillLevel;
+  accuracy: number;
+  successivePasses: number;
+  isMastered: boolean;
+  isLocked: boolean;
+  attempts: number;
+  timeSpent: number;
+  lastAttemptAt?: number;
+}
+
+export interface MasteredGuardian {
+  sound: string;
+  name: string;
+  image: string;
+  masteredAt: number;
+  nodeId: string;
+}
+
+export interface UserSettings {
+  speechRate: number;
+  dyslexicFont: boolean;
+  highContrast: boolean;
+  difficulty: DifficultyLevel;
+}
+
+export interface UserProfile {
+  id: string;
+  playerName: string;
+  characterType: CharacterType;
+  totalStars: number;
+  totalSoundShards: number;
+  totalMagicSeeds: number;
+  createdDate: number;
+  lastActive: number;
+  masteryLevel: number;
+  consecutiveDays: number;
+  onboardingCompleted: boolean;
+  placementScore: number;
+  notifications: string[];
+  pairing: { isPaired: boolean; parentCode?: string };
+  lastDailyChallenge?: number;
+}
+
+export interface GameSession {
+  id: string;
+  nodeId: string;
+  startTime: number;
+  endTime: number;
+  accuracy: number;
+  starsEarned: number;
+  wordsAttempted: string[];
+  wordsMastered: string[];
+}
+
+export interface AppState {
+  nodes: SkillNode[];
+  stars: number;
+  soundShards: number;
+  magicSeeds: number;
+  characterType: CharacterType;
+  settings: UserSettings;
+  guardians: Record<string, MasteredGuardian>;
+  profile: UserProfile;
+  sessions: GameSession[];
+}
+
+export type CharacterType = 'brio' | 'vowelia' | 'diesel' | 'zippy' | 'BRIO' | 'VOWELIA' | 'DIESEL' | 'ZIPPY';
