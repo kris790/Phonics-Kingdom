@@ -239,11 +239,9 @@ function App() {
     storageService.saveState(state);
   }, [state]);
 
-  // Handle starting a level
-  const handleStartLevel = useCallback(async (islandId: string, levelId: string) => {
-    // Note: Task generation is handled by usePhonicsGame hook
-    // This is just a callback for when a level is selected
-  }, []);
+  // Note: Level starting is handled automatically by GameEngine's useEffect
+  // when it sees currentIslandId without an active session. The usePhonicsGame
+  // hook's startLevel function generates tasks and dispatches START_LEVEL.
 
   // Handle character selection
   const handleCharacterSelect = useCallback((characterId: string) => {
@@ -313,7 +311,6 @@ function App() {
           <MagicMap
             state={state}
             dispatch={dispatch}
-            onStartLevel={handleStartLevel}
           />
         );
 

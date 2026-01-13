@@ -26,7 +26,7 @@ const ISLAND_GRADIENTS: Record<string, string> = {
 interface MagicMapProps {
   state: GameState;
   dispatch: React.Dispatch<GameAction>;
-  onStartLevel: (islandId: string, levelId: string) => void;
+  onStartLevel?: (islandId: string, levelId: string) => void; // Optional, for backwards compatibility
 }
 
 export const MagicMap: React.FC<MagicMapProps> = ({
@@ -65,13 +65,13 @@ export const MagicMap: React.FC<MagicMapProps> = ({
   const handleIslandClick = useCallback((island: typeof ISLANDS[0]) => {
     if (!isIslandUnlocked(island)) return;
     
-    const progress = getIslandProgress(island.id);
-    const nextLevel = Math.min(progress.completedLevels + 1, island.levels);
-    
+    // Set the current island - GameEngine will auto-start the level
     dispatch({ type: 'SELECT_ISLAND', islandId: island.id });
-    onStartLevel(island.id, `${island.id}-level-${nextLevel}`);
+    
+    // Navigate to game view - GameEngine's useEffect will call startLevel
+    // when it sees currentIslandId without an active session
     dispatch({ type: 'NAVIGATE', view: 'game' });
-  }, [isIslandUnlocked, getIslandProgress, dispatch, onStartLevel]);
+  }, [isIslandUnlocked, dispatch]);
 
   const getCharacterGreeting = () => {
     const greetings: Record<string, { intro: string; message: string }> = {
