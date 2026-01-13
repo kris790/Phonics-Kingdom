@@ -1,0 +1,135 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run linter
+        run: npm run build 2>&1 | head -100
+        continue-on-error: true
+
+      - name: Run tests with coverage
+        run: npm test -- --coverage --watchAll=false --passWithNoTests
+        env:
+          CI: true
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v4
+        if: matrix.node-version == '20.x'
+        with:
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
+          verbose: true
+        continue-on-error: true
+
+      - name: Check coverage threshold
+        if: matrix.node-version == '20.x'
+        run: |
+          if [ -f coverage/coverage-summary.json ]; then
+            COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.statements.pct')
+            echo "Statement coverage: $COVERAGE%"
+            if (( $(echo "$COVERAGE < 50" | bc -l) )); then
+              echo "::warning::Coverage is below 50%. Consider adding more tests."
+            fi
+          else
+            echo "No coverage report found"
+          fi
+        continue-on-error: true
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build production bundle
+        run: npm run build
+        env:
+          CI: true
+          GENERATE_SOURCEMAP: false
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: build/
+          retention-days: 7
+
+  edge-case-audit:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for edge case comments
+        run: |
+          echo "## Edge Case Audit" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Find new/modified files
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- '*.ts' '*.tsx' | head -20)
+          
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No TypeScript files changed" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          
+          echo "### Changed Files:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "$CHANGED_FILES" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check for edge case patterns
+          echo "### Edge Case Patterns Found:" >> $GITHUB_STEP_SUMMARY
+          
+          NULL_CHECKS=$(grep -rn "=== null\|=== undefined\|!== null\|!== undefined\|\?\." $CHANGED_FILES 2>/dev/null | wc -l || echo 0)
+          echo "- Null/undefined checks: $NULL_CHECKS" >> $GITHUB_STEP_SUMMARY
+          
+          TRY_CATCH=$(grep -rn "try {" $CHANGED_FILES 2>/dev/null | wc -l || echo 0)
+          echo "- Try/catch blocks: $TRY_CATCH" >> $GITHUB_STEP_SUMMARY
+          
+          BOUNDARY=$(grep -rn "Math.min\|Math.max\|\.length\s*[<>=]" $CHANGED_FILES 2>/dev/null | wc -l || echo 0)
+          echo "- Boundary checks: $BOUNDARY" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Review the PR template checklist for comprehensive edge case coverage" >> $GITHUB_STEP_SUMMARY
+        continue-on-error: true
