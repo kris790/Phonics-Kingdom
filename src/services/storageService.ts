@@ -25,6 +25,12 @@ const getDefaultState = (): GameState => ({
   shardsCollected: [],
   masteredGuardians: [],
   
+  // Reward Shop
+  purchasedItems: [],
+  equippedPet: null,
+  equippedCostume: null,
+  equippedDecor: [],
+  
   // Daily challenge
   lastDailyChallengeDate: null,
   dailyChallengeStreak: 0,

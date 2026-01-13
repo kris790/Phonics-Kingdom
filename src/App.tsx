@@ -18,6 +18,7 @@ import ParentLock from './components/ParentLock';
 import SoundVault from './components/SoundVault';
 import DailyChallenge from './components/DailyChallenge';
 import CharacterChat from './components/CharacterChat';
+import RewardShop from './components/RewardShop';
 
 // Seed dummy data on first load (for demo/testing)
 // This only runs once if no data exists
@@ -222,6 +223,45 @@ const appReducer = (state: GameState, action: GameAction): GameState => {
         masteredGuardians: [...state.masteredGuardians, action.guardian],
       };
 
+    case 'PURCHASE_ITEM': {
+      // Deduct stars and add item to purchased list
+      return {
+        ...state,
+        totalStars: Math.max(0, state.totalStars - action.cost),
+        purchasedItems: [...(state.purchasedItems || []), action.item],
+      };
+    }
+
+    case 'EQUIP_ITEM': {
+      const updatedItems = (state.purchasedItems || []).map(item => ({
+        ...item,
+        isEquipped: item.itemId === action.itemId ? true : 
+          (action.category === 'pet' || action.category === 'costume') ? 
+            item.isEquipped && item.itemId !== action.itemId : item.isEquipped,
+      }));
+      
+      return {
+        ...state,
+        purchasedItems: updatedItems,
+        ...(action.category === 'pet' && { equippedPet: action.itemId }),
+        ...(action.category === 'costume' && { equippedCostume: action.itemId }),
+        ...(action.category === 'decor' && { 
+          equippedDecor: [...(state.equippedDecor || []), action.itemId] 
+        }),
+      };
+    }
+
+    case 'UNEQUIP_ITEM': {
+      return {
+        ...state,
+        ...(action.category === 'pet' && { equippedPet: null }),
+        ...(action.category === 'costume' && { equippedCostume: null }),
+        ...(action.category === 'decor' && { 
+          equippedDecor: (state.equippedDecor || []).filter(id => id !== action.category) 
+        }),
+      };
+    }
+
     default:
       return state;
   }
@@ -375,6 +415,14 @@ function App() {
             nodes={[]}
             sessions={[]}
             onExit={() => dispatch({ type: 'NAVIGATE', view: 'magic-map' })}
+          />
+        );
+
+      case 'reward-shop':
+        return (
+          <RewardShop
+            state={state}
+            dispatch={dispatch}
           />
         );
 

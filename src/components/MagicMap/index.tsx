@@ -293,11 +293,11 @@ export const MagicMap: React.FC<MagicMapProps> = ({
             </button>
             
             <button 
-              className="flex flex-col items-center justify-center w-20 py-2 opacity-60 hover:opacity-100 transition-opacity"
-              onClick={() => {/* Shop coming soon */}}
+              className="flex flex-col items-center justify-center w-20 py-2 hover:opacity-100 transition-opacity hover:bg-purple-600/20 rounded-full"
+              onClick={() => dispatch({ type: 'NAVIGATE', view: 'reward-shop' })}
             >
               <span className="text-xl">🛍️</span>
-              <span className="text-[10px] font-bold text-gray-400 dark:text-gray-600 mt-0.5">Shop</span>
+              <span className="text-[10px] font-bold text-white dark:text-gray-900 mt-0.5">Shop</span>
             </button>
             
             <button 

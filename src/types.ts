@@ -323,6 +323,12 @@ export interface GameState {
   shardsCollected: string[]; // Island IDs with mastery
   masteredGuardians: MasteredGuardian[];
   
+  // Reward Shop
+  purchasedItems: PurchasedItem[];
+  equippedPet: string | null;
+  equippedCostume: string | null;
+  equippedDecor: string[];
+  
   // Daily challenge
   lastDailyChallengeDate: string | null;
   dailyChallengeStreak: number;
@@ -356,7 +362,38 @@ export type AppView =
   | 'settings'
   | 'sound-vault'
   | 'daily-challenge'
-  | 'character-chat';
+  | 'character-chat'
+  | 'reward-shop';
+
+// ============================================
+// Reward Shop Types
+// ============================================
+export type ShopItemCategory = 'pet' | 'costume' | 'decor' | 'powerup';
+export type ShopItemRarity = 'common' | 'rare' | 'epic' | 'legendary';
+
+export interface ShopItem {
+  id: string;
+  name: string;
+  description: string;
+  category: ShopItemCategory;
+  cost: number;
+  imageUrl: string;
+  emoji: string;
+  unlockCondition?: string;
+  rarity: ShopItemRarity;
+}
+
+export interface PlayerCurrency {
+  tickets: number;
+  gems: number;
+  streakDays: number;
+}
+
+export interface PurchasedItem {
+  itemId: string;
+  purchasedAt: Date;
+  isEquipped: boolean;
+}
 
 // ============================================
 // Action Types
@@ -381,7 +418,10 @@ export type GameAction =
   | { type: 'COMPLETE_ASSESSMENT'; skillLevel: SkillLevel }
   | { type: 'COMPLETE_WORLD_INTRO' }
   | { type: 'COMPLETE_DAILY_CHALLENGE'; stars: number }
-  | { type: 'ADD_MASTERED_GUARDIAN'; guardian: MasteredGuardian };
+  | { type: 'ADD_MASTERED_GUARDIAN'; guardian: MasteredGuardian }
+  | { type: 'PURCHASE_ITEM'; item: PurchasedItem; cost: number }
+  | { type: 'EQUIP_ITEM'; itemId: string; category: ShopItemCategory }
+  | { type: 'UNEQUIP_ITEM'; category: ShopItemCategory };
 
 // ============================================
 // Island Types
