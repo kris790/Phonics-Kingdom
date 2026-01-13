@@ -57,6 +57,93 @@ A jargon-free hub for parents to see real progress.
 
 ---
 
+## 🏗️ System Architecture
+
+```mermaid
+flowchart TD
+    %% User Interaction Layer
+    User["👶 Child (Age 4-6)<br/>👨‍👩‍👧 Parent/Teacher"] --> Browser["🌐 Web Browser<br/>(Chrome, Safari, Edge)"]
+    
+    %% Frontend Layer - React PWA
+    subgraph Frontend ["Frontend Layer - React Progressive Web App (PWA)"]
+        direction LR
+        PWA["📱 React PWA<br/>(TypeScript + Tailwind CSS)"]
+        
+        subgraph PWA_Modules ["Core Modules"]
+            FE1["🎮 Game Engine<br/>5 interactive task types"]
+            FE2["🗺️ Magic Map<br/>Island navigation"]
+            FE3["🏠 Parent Hub<br/>Analytics dashboard"]
+            FE4["👤 Character System<br/>Brio, Vowelia, Diesel, Zippy"]
+        end
+        
+        PWA --> PWA_Modules
+    end
+    
+    Browser --> PWA
+    
+    %% Backend Layer - Serverless/Static
+    subgraph Backend ["Backend Layer - Serverless/Static Hosting"]
+        direction LR
+        Hosting["☁️ Static Hosting<br/>(Vercel/Netlify/GitHub Pages)"]
+        Serverless["⚡ Serverless Functions<br/>(API routes if needed)"]
+        
+        Hosting --> Serverless
+    end
+    
+    PWA --> Hosting
+    
+    %% Database Layer - Browser Storage + Optional Cloud Sync
+    subgraph Database ["Database Layer - Local First + Cloud Sync"]
+        direction LR
+        LocalStorage["💾 Browser LocalStorage<br/>(Primary data store)"]
+        IndexedDB["🗃️ IndexedDB<br/>(Larger data - audio, images)"]
+        CloudSync["☁️ Cloud Firestore<br/>(Optional sync for multi-device)"]
+        
+        LocalStorage --> CloudSync
+        IndexedDB --> CloudSync
+    end
+    
+    PWA --> LocalStorage
+    PWA --> IndexedDB
+    
+    %% External Services Layer
+    subgraph ExternalServices ["External Services"]
+        direction LR
+        AI_API["🤖 Google Gemini API<br/>(AI content generation)"]
+        TTS_API["🔊 Web Speech API<br/>(Text-to-Speech fallback)"]
+        Analytics["📊 Google Analytics 4<br/>(Usage analytics)"]
+        ErrorTracking["🐛 Sentry<br/>(Error monitoring)"]
+        EmailService["✉️ EmailJS/SendGrid<br/>(Parent reports - future)"]
+        
+        AI_API --> TTS_API
+    end
+    
+    %% Connections
+    Serverless --> AI_API
+    PWA --> TTS_API
+    PWA --> Analytics
+    PWA --> ErrorTracking
+    
+    %% Optional future connections
+    Serverless -.-> EmailService
+    CloudSync -.-> EmailService
+
+    %% Styling
+    classDef frontend fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef backend fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef database fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef external fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef user fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    
+    class Frontend,Hosting,PWA,PWA_Modules frontend
+    class Backend,Serverless backend
+    class Database,LocalStorage,IndexedDB,CloudSync database
+    class ExternalServices,AI_API,TTS_API,Analytics,ErrorTracking,EmailService external
+    class User,Browser user
+```
+
+---
+
 ## 📥 Getting Started
 
 ### Prerequisites
