@@ -263,7 +263,29 @@ flowchart TD
     PP8 --> EXT1
     CP8 -.-> DB3
 ```
+### Flow Summary
 
+| User | Auth Required | Data Storage | Key Features |
+|------|---------------|--------------|--------------|
+| **Child** | ❌ None | LocalStorage + IndexedDB | Zero friction, instant play, offline-first |
+| **Parent** | ✅ Math gate | Cloud Firestore | Analytics, payments, settings control |
+
+### Design Principles
+
+- **Children**: Zero friction, no passwords, 3 clicks to first game
+- **Parents**: Simple math gate (5+3), dashboard access, payment control
+- **COPPA Compliant**: No PII collected from children, device-based identification
+
+### Freemium Model
+
+| Feature | Free Tier | Premium |
+|---------|-----------|---------|
+| Islands | Consonant Cove only | All 5 islands |
+| Characters | 1 character | All 4 characters |
+| Analytics | Basic progress | Detailed reports |
+| New Content | Delayed | Early access |
+
+**Pricing**: Monthly $4.99 / Annual $49.99 (save 16%)
 ---
 
 ## �📥 Getting Started
