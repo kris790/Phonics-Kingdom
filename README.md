@@ -288,6 +288,63 @@ flowchart TD
 **Pricing**: Monthly $4.99 / Annual $49.99 (save 16%)
 ---
 
+## 🎮 Core Gameplay Loop
+
+```mermaid
+flowchart TD
+    Start["**START**<br/>Child starts phonics task"]
+    Display["**Task Display**<br/>Shows picture 🍋, speaks instruction 🔊"]
+    Interaction{"**Child Attempts Answer**"}
+    Decision{"**Correct?**"}
+    
+    %% Success Path
+    SuccessFeedback["**SUCCESS** ✅<br/>Green check, 'Great job!'"]
+    SuccessTeaching["**Reinforce**<br/>'L says /l/ like lemon!'"]
+    SuccessPoints["**Award** ⭐ +1 star"]
+    
+    %% Failure Path
+    FailureFeedback["**TRY AGAIN** ❌<br/>Gentle correction, hints"]
+    FailureTeaching["**Teach**<br/>'Actually, L says /l/'"]
+    FailureRetry{"**Retry?**"}
+    
+    %% Progress Check
+    MoreTasks{"**More Tasks?**"}
+    NextTask["**Next Task**"]
+    Complete["**Session Complete** 🎉"]
+    Mastery{"**≥85% Accuracy?**"}
+    Shard["**💎 Award King Shard**"]
+    Save["**Save Progress**<br/>LocalStorage + IndexedDB"]
+    End["**END** ↩️ Magic Map"]
+    
+    Start --> Display --> Interaction --> Decision
+    Decision -- Yes --> SuccessFeedback --> SuccessTeaching --> SuccessPoints --> MoreTasks
+    Decision -- No --> FailureFeedback --> FailureTeaching --> FailureRetry
+    FailureRetry -- Yes --> Interaction
+    FailureRetry -- No --> MoreTasks
+    MoreTasks -- Yes --> NextTask --> Display
+    MoreTasks -- No --> Complete --> Mastery
+    Mastery -- Yes --> Shard --> Save --> End
+    Mastery -- No --> Save --> End
+```
+
+### Pedagogical Design
+
+| Step | Educational Principle |
+|------|----------------------|
+| **Teaching AFTER answer** | Assessment-first, prevents answer leaks |
+| **Corrective feedback** | Zone of Proximal Development |
+| **Partial credit** | Growth mindset encouragement |
+| **Error tracking** | Data-driven adaptation |
+| **85% mastery threshold** | Competency-based progression |
+
+### Error Patterns Tracked
+
+- `b-d-confusion`: Mixes "b" and "d" sounds
+- `short-vowels`: Confuses short vowel sounds  
+- `ending-sounds`: Struggles with ending sounds
+- `blend-segmentation`: Difficulty separating blends
+---
+
 ## �📥 Getting Started
 
 ### Prerequisites
