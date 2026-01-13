@@ -5,6 +5,7 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import { Keyboard } from '@capacitor/keyboard';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 import { App } from '@capacitor/app';
+import { nativeStorageService } from './nativeStorageService';
 
 // Check if running in native app
 export const isNative = (): boolean => {
@@ -26,6 +27,16 @@ export const initializeNative = async (): Promise<void> => {
   console.log(`📱 Running in native mode (${getPlatform()})`);
 
   try {
+    // Migrate localStorage to native storage (first launch after install)
+    const migrated = await nativeStorageService.migrateFromLocalStorage();
+    if (migrated) {
+      console.log('📦 Data migrated to native storage');
+    }
+
+    // Log storage info
+    const storageInfo = await nativeStorageService.getStorageInfo();
+    console.log('📦 Storage:', storageInfo);
+
     // Configure status bar
     await StatusBar.setStyle({ style: Style.Dark });
     if (getPlatform() === 'android') {
