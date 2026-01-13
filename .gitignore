@@ -21,3 +21,18 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Native platforms (Capacitor)
+# Include platform directories in git for team collaboration
+# Only ignore derived/build files
+/ios/App/App/public/
+/ios/App/Pods/
+/ios/App/DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+/android/app/src/main/assets/public/
+/android/.gradle/
+/android/build/
+/android/app/build/
+/android/local.properties

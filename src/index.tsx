@@ -4,6 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import { initializeNative, isNative } from './services/nativeService';
+
+// Initialize native features if running in Capacitor
+initializeNative().then(() => {
+  console.log('[App] Native initialization complete');
+  console.log('[App] Running as:', isNative() ? 'Native App' : 'Web/PWA');
+}).catch(error => {
+  console.warn('[App] Native initialization failed:', error);
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,21 +23,26 @@ root.render(
   </React.StrictMode>
 );
 
-// Register service worker for offline functionality
-serviceWorkerRegistration.register({
-  onSuccess: () => {
-    console.log('[App] Content cached for offline use');
-  },
-  onUpdate: () => {
-    console.log('[App] New version available');
-  },
-  onOffline: () => {
-    console.log('[App] Running in offline mode');
-  },
-  onOnline: () => {
-    console.log('[App] Back online');
-  },
-});
+// Register service worker for offline functionality (web/PWA only)
+// In native apps, Capacitor handles offline bundling
+if (!isNative()) {
+  serviceWorkerRegistration.register({
+    onSuccess: () => {
+      console.log('[App] Content cached for offline use');
+    },
+    onUpdate: () => {
+      console.log('[App] New version available');
+    },
+    onOffline: () => {
+      console.log('[App] Running in offline mode');
+    },
+    onOnline: () => {
+      console.log('[App] Back online');
+    },
+  });
+} else {
+  console.log('[App] Native app - skipping service worker registration');
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
