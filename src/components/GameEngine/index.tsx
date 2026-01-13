@@ -51,13 +51,6 @@ export const GameEngine: React.FC<GameEngineProps> = ({ state, dispatch }) => {
 
   // Auto-start level when GameEngine mounts with an island selected but no session
   useEffect(() => {
-    console.log('🎮 GameEngine useEffect:', {
-      currentIslandId: state.currentIslandId,
-      hasSession: !!state.currentSession,
-      isLoadingTasks,
-      isStartingLevel: isStartingLevelRef.current,
-    });
-    
     if (state.currentIslandId && !state.currentSession && !isLoadingTasks && !isStartingLevelRef.current) {
       isStartingLevelRef.current = true;
       const islandId = state.currentIslandId;
@@ -66,9 +59,7 @@ export const GameEngine: React.FC<GameEngineProps> = ({ state, dispatch }) => {
       const nextLevel = Math.min(completedLevels + 1, 5);
       const levelId = `${islandId}-level-${nextLevel}`;
       
-      console.log('🚀 GameEngine: Starting level', levelId, 'for island', islandId);
       startLevel(islandId, levelId).finally(() => {
-        console.log('✅ GameEngine: Level started');
         isStartingLevelRef.current = false;
       });
     }

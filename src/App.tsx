@@ -27,7 +27,6 @@ const appReducer = (state: GameState, action: GameAction): GameState => {
       };
 
     case 'NAVIGATE':
-      console.log('🚀 Reducer: NAVIGATE ->', action.view);
       return {
         ...state,
         view: action.view,
@@ -35,14 +34,12 @@ const appReducer = (state: GameState, action: GameAction): GameState => {
       };
 
     case 'SELECT_ISLAND':
-      console.log('🎯 Reducer: SELECT_ISLAND ->', action.islandId);
       return {
         ...state,
         currentIslandId: action.islandId,
       };
 
     case 'START_LEVEL': {
-      console.log('🎮 Reducer: START_LEVEL ->', action.levelId, 'Tasks:', action.tasks?.length);
       const session: LevelSession = {
         levelId: action.levelId,
         tasks: action.tasks,

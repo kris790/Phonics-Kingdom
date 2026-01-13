@@ -38,23 +38,13 @@ export const MagicMap: React.FC<MagicMapProps> = ({
   }, [state.islandProgress]);
 
   const handleIslandClick = useCallback((island: typeof ISLANDS[0]) => {
-    console.log('🗺️ MagicMap: Island clicked:', island.name, island.id);
-    
-    if (!isIslandUnlocked(island)) {
-      console.log('🔒 MagicMap: Island is locked');
-      return;
-    }
+    if (!isIslandUnlocked(island)) return;
     
     const progress = getIslandProgress(island.id);
     const nextLevel = Math.min(progress.completedLevels + 1, island.levels);
     
-    console.log('🎯 MagicMap: Dispatching SELECT_ISLAND:', island.id);
     dispatch({ type: 'SELECT_ISLAND', islandId: island.id });
-    
-    console.log('📞 MagicMap: Calling onStartLevel:', island.id, `${island.id}-level-${nextLevel}`);
     onStartLevel(island.id, `${island.id}-level-${nextLevel}`);
-    
-    console.log('🚀 MagicMap: Dispatching NAVIGATE to game');
     dispatch({ type: 'NAVIGATE', view: 'game' });
   }, [isIslandUnlocked, getIslandProgress, dispatch, onStartLevel]);
 
