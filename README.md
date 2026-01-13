@@ -168,7 +168,105 @@ flowchart TD
 
 ---
 
-## 📥 Getting Started
+## � User Flows
+
+```mermaid
+flowchart TD
+    %% ========== FLOW 1: CHILD PLAYER ==========
+    subgraph Flow1 ["👶 Flow 1: Child Player (Age 4-6)"]
+        direction TB
+        CP1["**Start**<br/>Child opens app in browser"]
+        CP2["**No Auth Required**<br/>Immediate access to free content"]
+        CP3{"**First Visit?**"}
+        CP4["**Character Selection**<br/>Choose Brio, Vowelia, Diesel, or Zippy"]
+        CP5["**Magic Map Navigation**<br/>Explore unlocked islands"]
+        CP6["**Gameplay Loop**<br/>Complete 3 phonics tasks per island"]
+        
+        subgraph CP_DB ["Local Database Interactions"]
+            CP7["**Save Progress**<br/>LocalStorage: Tasks completed, stars earned"]
+            CP8["**Update Analytics**<br/>IndexedDB: Session data, error patterns"]
+        end
+        
+        CP9["**Earn Rewards**<br/>Stars ⭐ for completion<br/>King Shards 💎 for 85%+ accuracy"]
+        CP10{"**Try Paid Content?**"}
+        CP11["**Free Tier Gate**<br/>'Ask a grown-up to unlock more!'"]
+        CP12["**Continue Playing**<br/>Return to Magic Map"]
+        
+        CP1 --> CP2 --> CP3
+        CP3 -- Yes --> CP4
+        CP3 -- No --> CP5
+        CP4 --> CP5 --> CP6 --> CP7
+        CP7 --> CP8 --> CP9 --> CP10
+        CP10 -- Yes --> CP11 --> CP12
+        CP10 -- No --> CP12
+    end
+    
+    %% ========== FLOW 2: PARENT/PAYING USER ==========
+    subgraph Flow2 ["👨‍👩‍👧 Flow 2: Parent/Paying User"]
+        direction TB
+        PP1["**Start**<br/>Parent opens Parent Hub<br/>(or sees child's prompt)"]
+        PP2["**Adult Verification**<br/>Solve simple math puzzle<br/>e.g., 'What is 5 + 3?'"]
+        PP3{"**Verification Passed?**"}
+        PP4["**Access Parent Hub**<br/>View child's progress, analytics"]
+        PP5["**Explore Premium Features**<br/>See what paid tier unlocks"]
+        PP6{"**Purchase Decision?**"}
+        
+        subgraph PP_Payment ["Payment Gateway Flow"]
+            PP7["**Select Plan**<br/>Monthly: $4.99<br/>Annual: $49.99 (save 16%)"]
+            PP8["**Payment Form**<br/>Stripe embedded checkout"]
+            PP9{"**Payment Successful?**"}
+            PP10["**Update User Status**<br/>Database: premium=true, expiry_date"]
+            PP11["**Grant Access**<br/>Unlock all islands, features"]
+            PP12["**Email Receipt**<br/>SendGrid: confirmation + parent report"]
+        end
+        
+        PP13["**Manage Account**<br/>Update payment, add children, set limits"]
+        PP14["**Review Analytics**<br/>Mastery reports, error patterns, recommendations"]
+        PP15["**Configure Settings**<br/>Audio speed, dyslexia font, content filters"]
+        
+        PP1 --> PP2 --> PP3
+        PP3 -- Yes --> PP4 --> PP5 --> PP6
+        PP3 -- No --> PP1
+        PP6 -- Yes --> PP7 --> PP8 --> PP9
+        PP9 -- Yes --> PP10 --> PP11 --> PP12 --> PP13
+        PP9 -- No --> PP5
+        PP6 -- No --> PP13
+        PP13 --> PP14 --> PP15
+    end
+    
+    %% ========== DATABASE INTERACTIONS ==========
+    subgraph Database ["📊 Database Interactions (Cloud - Optional)"]
+        direction LR
+        DB1["**Firestore Profiles**<br/>User data, children profiles"]
+        DB2["**Subscription Records**<br/>Stripe customer IDs, plan details"]
+        DB3["**Learning Analytics**<br/>Aggregated progress data"]
+        DB4["**Content Metadata**<br/>Island unlocks, feature flags"]
+        
+        DB1 --> DB2 --> DB3 --> DB4
+    end
+    
+    %% ========== EXTERNAL SERVICES ==========
+    subgraph External ["🔗 External Services"]
+        direction LR
+        EXT1["**Stripe**<br/>Payment processing<br/>Subscription management"]
+        EXT2["**SendGrid**<br/>Email receipts<br/>Weekly parent reports"]
+        EXT3["**Google Analytics**<br/>Anonymous usage data<br/>Performance metrics"]
+        
+        EXT1 --> EXT2 --> EXT3
+    end
+    
+    %% ========== CONNECTIONS BETWEEN FLOWS ==========
+    CP11 -.-> PP1
+    PP11 -.-> CP5
+    PP10 --> DB2
+    PP12 --> EXT2
+    PP8 --> EXT1
+    CP8 -.-> DB3
+```
+
+---
+
+## �📥 Getting Started
 
 ### Prerequisites
 - An active **Google Gemini API Key**.
