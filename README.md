@@ -142,6 +142,30 @@ flowchart TD
     class User,Browser user
 ```
 
+### Architecture Summary
+
+| Layer | Component | Technology | Purpose |
+|-------|-----------|------------|---------|
+| **Frontend** | React PWA | React 18 + TypeScript + Tailwind CSS | Game UI, task rendering, parent dashboard |
+| **Backend** | Static Hosting | Vercel/Netlify Functions | Serves React build, API routes for external calls |
+| **Database** | Local Storage | Browser LocalStorage + IndexedDB | Saves game progress, user data, cached assets |
+| **External** | AI Service | Google Gemini API | Generates phonics tasks, narratives, images |
+| **External** | TTS Service | Web Speech API + Gemini TTS | Text-to-speech for instructions, feedback |
+| **External** | Analytics | Google Analytics 4 + Sentry | Usage tracking, error monitoring |
+
+### Key Architecture Decisions
+
+- **Offline-First**: Children play in cars, planes, areas with poor connectivity
+- **Cost-Effective**: No server costs until you scale (static hosting is free)
+- **Simple Maintenance**: No database administration, server management
+- **COPPA Compliant**: Data stays on device by default
+
+### Implementation Status
+
+✅ React PWA, LocalStorage, Web Speech API  
+✅ Gemini AI integration (with offline fallback)  
+🔜 Cloud sync for multi-device, email reports for parents
+
 ---
 
 ## 📥 Getting Started
