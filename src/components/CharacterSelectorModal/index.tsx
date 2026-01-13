@@ -96,7 +96,10 @@ export const CharacterSelectorModal: React.FC<CharacterSelectorModalProps> = ({
                         {character.name}
                       </h3>
                       <p className="text-sm text-gray-500 mb-2">
-                        {character.personality}
+                        {character.personality.trait}
+                      </p>
+                      <p className="text-xs text-gray-400 italic mb-2">
+                        "{character.catchphrase}"
                       </p>
                       <div
                         className="text-xs px-2 py-1 rounded-full inline-block text-white"

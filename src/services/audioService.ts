@@ -1,5 +1,6 @@
 // Audio Service - Global audio management with circuit breaker
 import { storageService } from './storageService';
+import { CHARACTERS } from '../types';
 
 type AudioState = 'idle' | 'playing' | 'paused';
 
@@ -17,31 +18,59 @@ const serviceState: AudioServiceState = {
   isEnabled: true,
 };
 
-// Common character phrases for caching
+// Get random voice line for character
+const getRandomLine = (lines: string[]): string => {
+  return lines[Math.floor(Math.random() * lines.length)];
+};
+
+// Map external types to COMMON_PHRASES keys
+type CommonPhraseKey = 'greeting' | 'correct' | 'tryAgain' | 'levelComplete';
+const mapToCommonPhraseKey = (
+  type: 'greeting' | 'correct' | 'incorrect' | 'encouragement' | 'levelComplete'
+): CommonPhraseKey => {
+  if (type === 'incorrect' || type === 'encouragement') return 'tryAgain';
+  return type;
+};
+
+// Get character phrase based on type
+export const getCharacterPhrase = (
+  characterId: string,
+  type: 'greeting' | 'correct' | 'incorrect' | 'encouragement' | 'levelComplete'
+): string => {
+  const character = CHARACTERS[characterId];
+  const fallbackKey = mapToCommonPhraseKey(type);
+  
+  if (!character) return COMMON_PHRASES.brio[fallbackKey];
+  
+  const lines = character.voiceLines[type];
+  return lines ? getRandomLine(lines) : COMMON_PHRASES.brio[fallbackKey];
+};
+
+// Common character phrases for caching (fallback)
 export const COMMON_PHRASES = {
   brio: {
-    greeting: "Hi there, brave adventurer! Let's learn together!",
-    correct: "Sparkling Success! You did it!",
-    tryAgain: "Almost! Give it another try, you can do it!",
-    levelComplete: "Amazing work! You're becoming a phonics champion!",
+    greeting: "*tsk-ka-tsk* You're back! Let's bounce!",
+    correct: "*tsk-ka-tsk* YES! That rhythm's in your bones now!",
+    tryAgain: "Almost... listen to the space between the sounds...",
+    levelComplete: "*full beatbox celebration* You ROCKED that level!",
   },
   vowelia: {
-    greeting: "Welcome, wise learner! Are you ready to explore?",
-    correct: "Wonderful work! I knew you could do it!",
-    tryAgain: "That's okay, let's try again together.",
-    levelComplete: "You've done brilliantly! I'm so proud of you!",
+    greeting: "*whispers* Welcome back, brave learner...",
+    correct: "*hair glows brightly* Beautiful! You felt the sound!",
+    tryAgain: "*gentle whisper* Not quite... feel the sound in your heart...",
+    levelComplete: "*full radiant glow* You've woven something beautiful!",
   },
   diesel: {
-    greeting: "Hey buddy! Ready to dig into some phonics?",
-    correct: "Dig it! That was awesome!",
-    tryAgain: "Oops! Let's dig deeper and try again!",
-    levelComplete: "Woohoo! You really dug deep on that one!",
+    greeting: "*dusts off helmet* Ready to dig for treasure?",
+    correct: "TREASURE! You dug up the right sound!",
+    tryAgain: "Hmm, we're close to the treasure... try digging here...",
+    levelComplete: "*shows off treasure* Look what we found together!",
   },
   zippy: {
-    greeting: "Zoom zoom! Let's race through some learning!",
-    correct: "Zoom zoom! Lightning fast and correct!",
-    tryAgain: "Quick pit stop! Let's try that again!",
-    levelComplete: "Finish line! You zoomed through that level!",
+    greeting: "*zooooom* Ready to race? I promise to slow down!",
+    correct: "ZOOM ZOOM! Lightning fast AND correct!",
+    tryAgain: "*gentle brake sounds* Pit stop! Let's check the map...",
+    levelComplete: "*victory lap* CHAMPION! You zoomed through!",
   },
 };
 
